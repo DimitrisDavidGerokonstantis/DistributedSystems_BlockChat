@@ -21,19 +21,6 @@ Semester project for the course "Distributed Systems" (NTUA, 2023-24). Developed
 Η χρήση της βιβλιοθήκης multiprocessing της python απαιτεί κάποιες προσαρμογές στον κώδικα προκειμένου να τρέξει σε Windows. Ο κώδικας αυτός δουλεύει πλήρως σε Linux. 
 Οι αλλαγές που χρειάζονται για την εκτέλεση σε Windows αφορούν τον ορισμό μιας συνάρτησης main και αρχικοποίηση των νημάτων σε αυτήν και όχι όπως στον κώδικα των παραπάνω φακέλων. 
 Επίσης κάποιες μεταβλητές ορισμένες με χρήση managers, θα πρέπει να οριστούν σαν κοινές μεταβλητές (χωρίς χρήση managers) και να προσπελαύνονται κανονικά (χωρίς .value).
-Παράδειγμα ορισμού της main για τον User1.py: 
-
-def main():
-    t = threading.Thread(target=send_coins)
-    t.start()
-    broadcastMinedBlockThread = threading.Thread(target=broadcastMinedBlock)
-    broadcastMinedBlockThread.start()
-    app.run(host=myNode.ip, port=myNode.port, debug=False)
-    broadcastMinedBlockThread.join()
-
-
-if name == '__main__':
-    main()
 
 
 Εντός των src φακέλων υπάρχει ο φάκελος cli (ενδεικτικά μόνο για έναν κόμβο, τον 0 : για χρήση σε κάθε άλλο κόμβο χρειάζεται μόνο η αλλαγή των ports στα requests των αρχείων του cli). 
