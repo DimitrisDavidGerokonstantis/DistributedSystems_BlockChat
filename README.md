@@ -1,41 +1,65 @@
-# Distributed Systems 2023-24
-Semester project for the course "Distributed Systems" (NTUA, 2023-24). Developed a blockchain application (BlockChat) for exchanging money and messages. 
+# BlockChat
+The objective of this semester project was the creation of BlockChat: a blockchain-based platform through which  
+participants are able to exchange messages and coins (known as BlockChat coins - BCC).  
+Apart from the BlockChat implementation, we have also created a simple frontend application,  
+through which each user can make coin transactions or send messages to other participants   
+in the blockchain, as well as manage his stake and see how many blocks he has mined (a Proof-of-Stake  
+algorithm is used for mining of new blocks).  
+For the Backend we have used Python Flask, and for the Frontend React JS.  
 
-##  Our Team   Group: 29  
-| Name  | NTUA register number (Αριθμός Μητρώου) |
-| ------------- | ------------- |
-|  [Dimitrios-David Gerokonstantis](https://github.com/DimitrisDavidGerokonstantis)  | el19209  |   
-|  [Athanasios Tsoukleidis-Karydakis](https://github.com/ThanosTsoukleidis-Karydakis) | el19009  |
-|  [Ioannis Karavgoustis](https://github.com/gkara) |  el19847 |    
+## Collaborators  
+- [Dimitrios-David Gerokonstantis](https://github.com/DimitrisDavidGerokonstantis)  (el19209)
+- [Athanasios Tsoukleidis-Karydakis](https://github.com/ThanosTsoukleidis-Karydakis)  (el19009)
+- [Ioannis Karavgoustis](https://github.com/GiannisKaravgoustis) (el19847)
 
-## Description
-Στο Backend του repo υπάρχουν οι εξής φάκελοι:
+In this repository, the following folders are included:  
 
--  src5Clients : ο κώδικας για το BlockChat με 5 clients. Αυτός ο κώδικας περιέχει σχόλια και διευκρινίσεις.
+- **src5Clients:** Contains the BlockChat code for 5 clients in our blockchain. It also contains detailed code comments.  
 
-- src10Clients : Η μόνη διαφορά σε αυτόν τον κώδικα είναι η δημιουργία περισσότερων αρχείων clients και η προσαρμογή κάποιων παραμέτρων. 
-Κατά τα άλλα η υλοποίηση είναι ακριβώς ίδια. Ωστόσο, σε αυτόν τον φάκελο, τα αρχεία δεν περιέχουν σχόλια, οπότε για λόγους κατανόησης 
-της υλοποίησης προτείνουμε να ανατρέξετε στον φάκελο src5Clients.
+- **src10Clients:** Extension of the 5 clients implementation for 10 clients (more client files and chanegs in some parameters).
+It doesn't contain code comments, but the implementation is virtually the same to the one for 5 clients.  
 
-### ΣΗΜΕΙΩΣΗ
-Η χρήση της βιβλιοθήκης multiprocessing της python απαιτεί κάποιες προσαρμογές στον κώδικα προκειμένου να τρέξει σε Windows. Ο κώδικας αυτός δουλεύει πλήρως σε Linux. 
-Οι αλλαγές που χρειάζονται για την εκτέλεση σε Windows αφορούν τον ορισμό μιας συνάρτησης main και αρχικοποίηση των νημάτων σε αυτήν και όχι όπως στον κώδικα των παραπάνω φακέλων. 
-Επίσης κάποιες μεταβλητές ορισμένες με χρήση managers, θα πρέπει να οριστούν σαν κοινές μεταβλητές (χωρίς χρήση managers) και να προσπελαύνονται κανονικά (χωρίς .value).
+Note: The code runs perfectly on Linux systems, but requires some modifications to run on Windows. All threads need  
+to be defined in a new main function that is then being called to start a particular client. In addition, shared  
+variables defined through managers need to be defined simply as global variables. 
+Example for User1.py: 
 
-
-Εντός των src φακέλων υπάρχει ο φάκελος cli (ενδεικτικά μόνο για έναν κόμβο, τον 0 : για χρήση σε κάθε άλλο κόμβο χρειάζεται μόνο η αλλαγή των ports στα requests των αρχείων του cli). 
-Για την λειτουργία του cli, πρέπει για κάθε εντολή να ακολουθηθούν οι οδηγίες που δίνονται στην αναφορά.
-Επιπλέον εντός του src υπάρχουν κάποια αρχεία cli1.py, cli2.py κλπ, τα οποία διαβάζουν τα δοθέντα inputs (trans#.txt) και δημιουργούν αυτά τα transactions.
-Τέλος, υπάρχει το αρχείο run.py το οποίο τρέχει αυτόματα όλους τους κόμβους και (με αφαίρεση των τελευταίων σχολίων στον κώδικα) όλα τα αρχεία cli#.py, 
-οπότε με την χρήση του εκτελούνται αυτόματα τα πειράματα της εκφώνησης. 
-
-### Report
-Επιπλέον, στο repo υπάρχει ο φάκελος :
-- report : Περιέχει το .pdf αρχείο με την αναφορά και τον φάκελο LatexProject με τον κώδικα .tex σε Latex και τα χρησιμοποιούμενα images.
+```
+def main():
+    t = threading.Thread(target=send_coins)
+    t.start()
+    broadcastMinedBlockThread = threading.Thread(target=broadcastMinedBlock)
+    broadcastMinedBlockThread.start()
+    app.run(host=myNode.ip, port=myNode.port, debug=False)
+    broadcastMinedBlockThread.join()
 
 
-### ΣΧΕΤΙΚΑ ΜΕ ΤΟ FRONTEND :
-Ο κώδικας του frontend (χρήση React) είναι προσαρμοσμένος να επικοινωνεί με το backend του κόμβου 0 ενδεικτικά (για χρήση του σε οποιοδήποτε άλλο κόμβο, χρειάζεται μόνο η αλλαγή
-του χρησιμοποιούμενου port στα axios requests). Με npm install και npm start μπορεί να τρέξει το frontend. Σημειώνουμε ότι τα endpoints που χρησιμοποιεί το frontent
-έχουν προστεθεί μόνο στα αρχεία κώδικα του src5Clients, οπότε μόνο σε αυτό το test case μπορεί να ελεχθεί η λειτουργία του. Βέβαια, εύκολα κανείς αντιγράφει αυτά τα endpoints 
-και στα αρχεία κώδικα του src10Clients. 
+if name == '__main__':
+    main()
+```
+
+Inside the src folders, one can find the cli folder that implements a cli as specified in the report. The cli  
+is only implemented for the first user: it can easily be implemented for other users by changing the ports in  
+the requests being made by the various cli commands. In order for the cli to work, one needs to follow the  
+instructions in the report. Using run.py file, all users can be started immediately and the cli#.py files  
+read inputs from the given trans#.txt files that are used to conduct the performance measurements presented  
+in our report.  
+
+
+- **report:** Contains the report of our project, alongside the corresponding Latex code.
+
+- **frontend:** Contains the frontend of the application implemented with React.js. It is connected to the backend
+of the first user (similarly with the cli) and can be used for another user by changing the ports used by the axios
+requests. The frontend endpoints have only been added to the src5Clients use case. In the folder's README.md, the
+various screens of the application are presented.     
+
+## Backend layout (Component Diagram - Activity Diagram):  
+Below, one can view the Component Diagram that describes how we have implemented each client and the  
+communication between the different clients (more information in our report).  
+
+![image](https://github.com/ThanosTsoukleidis-Karydakis/BlockChat/assets/106911775/9378fba9-34ec-4937-949a-79cbbfb4226c)  
+
+Furthermore, the Activity Diagram presented below depicts fully all the available actions a user can make, alongside  
+everything that happens "behind the scenes".  
+
+![image](https://github.com/ThanosTsoukleidis-Karydakis/BlockChat/assets/106911775/e1d12cc9-c631-4f2a-9a14-d7ff493bf172)
